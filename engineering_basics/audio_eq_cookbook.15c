@@ -1,0 +1,55 @@
+# Programs for calculating the biquads in the Audio EQ Cookbook
+# https://www.w3.org/TR/audio-eq-cookbook/
+# 
+# Pepin Torres, P.E.
+# Date: Aug 1, 2024
+#
+# ------------------------------------------------------------------------------
+# Developed using simulator by Torsten Manz  https://HP-15C-Simulator.de
+# ------------------------------------------------------------------------------
+# HEWLETT·PACKARD 15C Simulator program
+# Created with version 4.6.00
+# ------------------------------------------------------------------------------
+#T:Audio EQ Cookbook
+#D:See page https://www.w3.org/TR/audio-eq-cookbook/ for reference to understand the input arguments on the stack
+#D:
+#D:Execute <strong>Label A </strong>to generate a 10x6 matrix of biquad coefficents for each of the 9 filter types.
+#D:
+#D:Place A, Bandwidth (in octaves, can be fractional), center frequency in Hz and sampling frequency in Hz in registers t, z, y, and x respectively.
+#D:
+#D:Format is as follows:
+#D:
+#D:Row 1: low pass filter coeffs b0, b1, b2, a0, a1 ,a2
+#D:Row 2: high pass filter coeffs b0, b1, b2, a0, a1 ,a2
+#D:Row 3: band pass filter Q gain coeffs b0, b1, b2, a0, a1 ,a2
+#D:Row 4: band pass filter 0dB gain coeffs b0, b1, b2, a0, a1 ,a2
+#D:Row 5: notch filter filter coeffs b0, b1, b2, a0, a1 ,a2
+#D:Row 6: allpass pass filter coeffs b0, b1, b2, a0, a1 ,a2
+#D:Row 7: peaking filter coeffs b0, b1, b2, a0, a1 ,a2
+#D:Row 8: low shelf filter coeffs b0, b1, b2, a0, a1 ,a2
+#D:Row 9 high shelf filter coeffs b0, b1, b2, a0, a1 ,a2
+#D:Row 10: A, BW, alpha, fo, Fs, Q
+#D:
+#D:Execute <strong>Label B</strong> (Label A <em>must</em> have been already run) to get the biquad gain at frequency fx
+#D:
+#D:Place fx and filter ID number (1 - 9)
+#D:
+#D:Register x will provide the gain at fx in linear, register y in dB
+# ------------------------------------------------------------------------------
+
+   000 {             } 
+   001 {    42 21 11 } f LBL A
+   002 {          10 } ÷
+   003 {       43 26 } g π
+   004 {          20 } ×
+   005 {           2 } 2
+   006 {          20 } ×
+   007 {       44  0 } STO 0
+   008 {          23 } SIN
+   009 {           2 } 2
+   010 {          10 } ÷
+   011 {          34 } x↔y
+   012 {          10 } ÷
+   013 {       44  1 } STO 1
+
+# ------------------------------------------------------------------------------
