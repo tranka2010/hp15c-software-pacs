@@ -2,54 +2,66 @@
 # https://www.w3.org/TR/audio-eq-cookbook/
 # 
 # Pepin Torres, P.E.
-# Date: Aug 1, 2024
+# Date: Aug 4, 2024
 #
-# ------------------------------------------------------------------------------
-# Developed using simulator by Torsten Manz  https://HP-15C-Simulator.de
-# ------------------------------------------------------------------------------
-# HEWLETT·PACKARD 15C Simulator program
-# Created with version 4.6.00
-# ------------------------------------------------------------------------------
-#T:Audio EQ Cookbook
-#D:See page https://www.w3.org/TR/audio-eq-cookbook/ for reference to understand the input arguments on the stack
-#D:
-#D:Execute <strong>Label A </strong>to generate a 10x6 matrix of biquad coefficents for each of the 9 filter types.
-#D:
-#D:Place A, Bandwidth (in octaves, can be fractional), center frequency in Hz and sampling frequency in Hz in registers t, z, y, and x respectively.
-#D:
-#D:Format is as follows:
-#D:
-#D:Row 1: low pass filter coeffs b0, b1, b2, a0, a1 ,a2
-#D:Row 2: high pass filter coeffs b0, b1, b2, a0, a1 ,a2
-#D:Row 3: band pass filter Q gain coeffs b0, b1, b2, a0, a1 ,a2
-#D:Row 4: band pass filter 0dB gain coeffs b0, b1, b2, a0, a1 ,a2
-#D:Row 5: notch filter filter coeffs b0, b1, b2, a0, a1 ,a2
-#D:Row 6: allpass pass filter coeffs b0, b1, b2, a0, a1 ,a2
-#D:Row 7: peaking filter coeffs b0, b1, b2, a0, a1 ,a2
-#D:Row 8: low shelf filter coeffs b0, b1, b2, a0, a1 ,a2
-#D:Row 9 high shelf filter coeffs b0, b1, b2, a0, a1 ,a2
-#D:Row 10: A, BW, alpha, fo, Fs, Q
-#D:
-#D:Execute <strong>Label B</strong> (Label A <em>must</em> have been already run) to get the biquad gain at frequency fx
-#D:
-#D:Place fx and filter ID number (1 - 9)
-#D:
-#D:Register x will provide the gain at fx in linear, register y in dB
-# ------------------------------------------------------------------------------
+#  Program produced for HP 15C.
 
-   000 {             } 
-   001 {    42 21 11 } f LBL A
-   002 {          10 } ÷
-   003 {       43 26 } g π
-   004 {          20 } ×
-   005 {           2 } 2
-   006 {          20 } ×
-   007 {       44  0 } STO 0
-   008 {          23 } SIN
-   009 {           2 } 2
-   010 {          10 } ÷
-   011 {          34 } x↔y
-   012 {          10 } ÷
-   013 {       44  1 } STO 1
+   001 { 42 21 13    } LBL C
+   002 { 43 8        } RAD
+   003 { 10          } /
+   004 { 43 26       } pi
+   005 { 20          } *
+   006 { 2           } 2
+   007 { 20          } *
+   008 { 23          } SIN
+   009 { 44 2        } STO 2
+   010 { 43 36       } LSTx
+   011 { 24          } COS
+   012 { 44 3        } STO 3
+   013 { 33          } R_down
+   014 { 33          } R_down
+   015 { 44 4        } STO 4
+   016 { 33          } R_down
+   017 { 44 5        } STO 5
+   018 { 43 5 8      } CF 8
+   019 { 42 16 0     } MATRIX 0
+   020 { 1           } 1
+   021 { 0           } 0
+   022 { 36          } ENTER
+   023 { 6           } 6
+   024 { 42 23 13    } DIM C
+   025 { 42 16 1     } MATRIX 1
+   026 { 1           } 1
+   027 { 45 3        } RCL 3
+   028 { 30          } -
+   029 { 36          } ENTER
+   030 { 36          } ENTER
+   031 { 2           } 2
+   032 { 10          } /
+   033 { 44 13 u     } STO C
+   034 { 34          } x<>y
+   035 { 44 13 u     } STO C
+   036 { 34          } x<>y
+   037 { 44 13 u     } STO C
+   038 { 45 2        } RCL 2
+   039 { 45 4        } RCL 4
+   040 { 10          } /
+   041 { 2           } 2
+   042 { 10          } /
+   043 { 44 6        } STO 6
+   044 { 1           } 1
+   045 { 40          } +
+   046 { 44 13 u     } STO C
+   047 { 45 3        } RCL 3
+   048 { 16          } CHS
+   049 { 2           } 2
+   050 { 20          } *
+   051 { 44 13 u     } STO C
+   052 { 45 6        } RCL 6
+   053 { 16          } CHS
+   054 { 1           } 1
+   055 { 40          } +
+   056 { 44 13 u     } STO C
+   057 { 43 32       } RTN
 
-# ------------------------------------------------------------------------------
+# End.
