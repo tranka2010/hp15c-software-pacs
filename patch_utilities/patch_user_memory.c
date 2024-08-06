@@ -32,9 +32,9 @@ int main()
     char c;
     int val;
 
-    fidBin = fopen ("basic_prog2.bin" , "r");
-    fidOpCodes = fopen ("patches.txt" , "r");
-    fidPatchedBin = fopen ("patched.bin" , "w");
+    fidBin = fopen ("preconditioned_image_for_patching.bin" , "r");
+    fidOpCodes = fopen ("../engineering_basics/audio_eq_cookbook.hex" , "r");
+    fidPatchedBin = fopen ("../engineering_basics/audio_eq_cookbook.bin" , "w");
 
     if (fidBin == NULL) perror ("Error opening file");
     else
