@@ -13,8 +13,9 @@
 int getVal(char c);
 void remove_char_from_string(char c, char *src, char *dst);
 void replace_char_from_string(char from, char to, char *str);
+char *str_replace(char *orig, char *rep, char *with);
 
-int main()
+int main(int argc, char **argv)
 {
     FILE* fidBin;
     FILE* fidOpCodes;
@@ -24,50 +25,64 @@ int main()
     int REGISTER_SIZE = 8;
     int NUM_TECHNICAL_REGISTER_BOTTOM = 2;
 
-    int num_opcodes;
+    int MAX_BYTES_HP15C_CE = 672;
+    int MAX_BYTES_HP15C_CE_EXPANDED = 999;
+
+    int numBytes;
 
     char bufferBin[USER_MEM_SPACE_SIZE_IN_BYTES];
-    char bufferOpCodeText[USER_MEM_SPACE_SIZE_IN_BYTES];
-    char bufferOpCodeTextParsed[USER_MEM_SPACE_SIZE_IN_BYTES];
-    char bufferOpCodeBinary[USER_MEM_SPACE_SIZE_IN_BYTES];
+    char bufferBytesAsText[USER_MEM_SPACE_SIZE_IN_BYTES];
+    char bufferBytesAsTextParsed[USER_MEM_SPACE_SIZE_IN_BYTES];
+    char bufferBytesBinary[USER_MEM_SPACE_SIZE_IN_BYTES];
 
     int idx;
     int val;
-    int currOpCode;
+    int currByte;
     int registerOffset = REGISTER_SIZE;
 
     char CARRIAGE_RETURN = 0xa;
     char NEWLINE = 0xd;
     char SPACE = 0x20;
 
-    fidBin = fopen ("preconditioned_image_for_patching.bin" , "r");
-    fidOpCodes = fopen ("../engineering_basics/audio_eq_cookbook.hex" , "r");
-    fidPatchedBin = fopen ("../engineering_basics/audio_eq_cookbook.bin" , "w");
+    //printf("%d\n",argc);
+    if (argc == 2)
+    {
+        printf("Input: %s %s\n",argv[0], argv[1]);
+        fidBin = fopen("preconditioned_image_for_patching.bin" , "r");
+        fidOpCodes = fopen(argv[1] , "r");
+        fidPatchedBin = fopen(str_replace(argv[1],".hex",".bin"), "w");
+    }
+    if (argc == 1)
+    {
+        printf("Only one argument is allowed.  Namely, the .hex file containing the values copied into an HP15C-CE image file.\n");
+        return -1;
+    }
+
 
     if (fidBin == NULL) perror ("Error opening file");
     else
     {
         // Read user image and program opcodes as ascii text
         fread((void *)bufferBin,1,USER_MEM_SPACE_SIZE_IN_BYTES,fidBin);
-        fread((void *)bufferOpCodeText,1,USER_MEM_SPACE_SIZE_IN_BYTES,fidOpCodes);
+        fread((void *)bufferBytesAsText,1,USER_MEM_SPACE_SIZE_IN_BYTES,fidOpCodes);
 
         // Remove all non-alpha numerical ascii characters and store in a buffer
-        replace_char_from_string(CARRIAGE_RETURN, SPACE, bufferOpCodeText);
-        replace_char_from_string(NEWLINE, SPACE, bufferOpCodeText);
-        remove_char_from_string(SPACE, bufferOpCodeText,bufferOpCodeTextParsed);
+        replace_char_from_string(CARRIAGE_RETURN, SPACE, bufferBytesAsText);
+        replace_char_from_string(NEWLINE, SPACE, bufferBytesAsText);
+        remove_char_from_string(SPACE, bufferBytesAsText,bufferBytesAsTextParsed);
 
         // Convert ASCII hex values into numbers (basically atoi)
         idx=0;
-        for (int i = 0; i < strlen(bufferOpCodeTextParsed); i=i+2)
+        for (int i = 0; i < strlen(bufferBytesAsTextParsed); i=i+2)
         {
-            bufferOpCodeBinary[idx] = getVal(bufferOpCodeTextParsed[i]) * 16 + 
-                                      getVal(bufferOpCodeTextParsed[i+1]);
+            bufferBytesBinary[idx] = getVal(bufferBytesAsTextParsed[i]) * 16 + 
+                                      getVal(bufferBytesAsTextParsed[i+1]);
             idx++;
         }
 
-        // Number of instructions
-        num_opcodes = idx;
-        printf("Num opcodes: %d\n",num_opcodes);
+        // Number of bytes
+        numBytes = idx;
+        printf("Num bytes: %d of 672 (%.2f%%)\n",numBytes, 100.0*(float)numBytes/(float)MAX_BYTES_HP15C_CE);
 
         // Copy program binary data into user image starting from
         // the 3rd 8-byte register from the bottom and work the way up
@@ -82,21 +97,22 @@ int main()
         // Bottom of user image
         // Note: the 8th byte of each register from Reg 3 and up need to be 0x00
         // so each register only has 7 bytes of actual program data
-        while(currOpCode < num_opcodes)
+        while(currByte < numBytes)
         {      
             for (int currRegByte = 0; currRegByte < REGISTER_SIZE-1; currRegByte++)
             {
                 bufferBin[USER_MEM_SPACE_SIZE_IN_BYTES - 
                         (NUM_TECHNICAL_REGISTER_BOTTOM * REGISTER_SIZE)-registerOffset + currRegByte] = 
-                        bufferOpCodeBinary[currOpCode]; 
-                currOpCode++;
-                if (currOpCode == num_opcodes) break;
+                        bufferBytesBinary[currByte]; 
+                currByte++;
+                if (currByte == numBytes) break;
             }
             registerOffset += REGISTER_SIZE;
         }
 
         // Write patched user image to file
         fwrite((void *)bufferBin,1,USER_MEM_SPACE_SIZE_IN_BYTES,fidPatchedBin);
+        printf("Output: %s\n", argv[1]);
 
         // Clean up
         fclose (fidBin);
@@ -151,4 +167,49 @@ void replace_char_from_string(char from, char to, char *str)
             str[i] = to;
         }
     }
+}
+char *str_replace(char *orig, char *rep, char *with) {
+    char *result; // the return string
+    char *ins;    // the next insert point
+    char *tmp;    // varies
+    int len_rep;  // length of rep (the string to remove)
+    int len_with; // length of with (the string to replace rep with)
+    int len_front; // distance between rep and end of last rep
+    int count;    // number of replacements
+
+    // sanity checks and initialization
+    if (!orig || !rep)
+        return NULL;
+    len_rep = strlen(rep);
+    if (len_rep == 0)
+        return NULL; // empty rep causes infinite loop during count
+    if (!with)
+        with = "";
+    len_with = strlen(with);
+
+    // count the number of replacements needed
+    ins = orig;
+    for (count = 0; (tmp = strstr(ins, rep)); ++count) {
+        ins = tmp + len_rep;
+    }
+
+    tmp = result = malloc(strlen(orig) + (len_with - len_rep) * count + 1);
+
+    if (!result)
+        return NULL;
+
+    // first time through the loop, all the variable are set correctly
+    // from here on,
+    //    tmp points to the end of the result string
+    //    ins points to the next occurrence of rep in orig
+    //    orig points to the remainder of orig after "end of rep"
+    while (count--) {
+        ins = strstr(orig, rep);
+        len_front = ins - orig;
+        tmp = strncpy(tmp, orig, len_front) + len_front;
+        tmp = strcpy(tmp, with) + len_with;
+        orig += len_front + len_rep; // move to next "end of rep"
+    }
+    strcpy(tmp, orig);
+    return result;
 }
