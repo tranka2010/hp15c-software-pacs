@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 
     int idx;
     int val;
-    int currByte;
+    int currByte = 0;
     int registerOffset = REGISTER_SIZE;
 
     char CARRIAGE_RETURN = 0xa;
@@ -45,16 +45,16 @@ int main(int argc, char **argv)
     char SPACE = 0x20;
 
     //printf("%d\n",argc);
-    if (argc == 2)
+    if (argc == 3)
     {
         printf("Input: %s %s\n",argv[0], argv[1]);
-        fidBin = fopen("preconditioned_image_for_patching.bin" , "r");
         fidOpCodes = fopen(argv[1] , "r");
+        fidBin = fopen(argv[2] , "r");
         fidPatchedBin = fopen(str_replace(argv[1],".hex",".bin"), "w");
     }
     if (argc == 1)
     {
-        printf("Only one argument is allowed.  Namely, the .hex file containing the values copied into an HP15C-CE image file.\n");
+        printf("Only two argument is allowed.  Namely, the .hex file containing the values copied into an HP15C-CE image file and a template .bin file.\n");
         return -1;
     }
 
@@ -112,7 +112,7 @@ int main(int argc, char **argv)
 
         // Write patched user image to file
         fwrite((void *)bufferBin,1,USER_MEM_SPACE_SIZE_IN_BYTES,fidPatchedBin);
-        printf("Output: %s\n", argv[1]);
+        printf("Output: %s\n", str_replace(argv[1],".hex",".bin"));
 
         // Clean up
         fclose (fidBin);
