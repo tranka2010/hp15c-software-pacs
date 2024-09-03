@@ -1,0 +1,340 @@
+LBL A
+4
+0
+/
+10^X
+STO .2
+RTN
+LBL B
+RAD
+2
+*
+1/X
+HYP^-1 SIN
+2
+LN
+/
+2
+*
+R_down
+STO 9
+/
+PI
+*
+2
+*
+STO .0
+SIN
+LSTx
+/
+R_up
+*
+STO .1
+RTN
+LBL C
+1
+9
+DIM (I)
+RAD
+CF 8
+MATRIX 0
+MATRIX 1
+RCL .0
+SIN
+STO .3
+RCL .0
+COS
+STO .4
+x<>y
+RCL .0
+x<>y
+/
+RCL .1
+*
+2
+LN
+2
+/
+*
+HYP SIN
+2
+*
+1/X
+STO .9
+2
+*
+RCL .3
+x<>y
+/
+STO .5
+RCL .2
+1
+-
+STO .6
+2
++
+STO .7
+RCL .2
+SQRT
+2
+*
+RCL .5
+*
+STO .8
+4
+ENTER
+3
+DIM A
+9
+ENTER
+3
+DIM B
+1
+RCL+ .5
+uSTO A
+2
+RCL* .4
+CHS
+uSTO A
+x<>y
+CHS
+2
++
+uSTO A
+RCL .5
+RCL/ .2
+1
++
+uSTO A
+R_up
+uSTO A
+R_down
+CHS
+2
++
+uSTO A
+RCL .4
+RCL* .6
+RCL+ .8
+RCL+ .7
+uSTO A
+RCL .4
+RCL* .7
+RCL+ .6
+2
+*
+CHS
+STO 6
+uSTO A
+RCL .4
+RCL* .6
+RCL- .8
+RCL+ .7
+uSTO A
+RCL .4
+RCL* .6
+CHS
+RCL+ .8
+RCL+ .7
+uSTO A
+RCL .4
+RCL* .7
+ CHS
+RCL+ .6
+2
+*
+uSTO A
+RCL .4
+RCL* .6
+RCL+ .8
+CHS
+RCL+ .7
+uSTO A
+MATRIX 1
+1
+RCL- .4
+ENTER
+ENTER
+2
+/
+uSTO B
+x<>y
+uSTO B
+x<>y
+uSTO B
+1
+RCL+ .4
+ENTER
+ENTER
+2
+/
+uSTO B
+x<>y
+CHS
+uSTO B
+x<>y
+uSTO B
+RCL .9
+RCL* .5
+uSTO B
+0
+uSTO A
+x<>y
+CHS
+uSTO B
+RCL .5
+uSTO B
+0
+uSTO B
+x<>y
+CHS
+uSTO B
+1
+uSTO B
+RCL .4
+2
+CHS
+*
+uSTO B
+x<>y
+uSTO B
+RCL- .5
+uSTO B
+x<>y
+uSTO B
+1
+RCL+ .5
+uSTO B
+R_down
+RCL .5
+RCL* .2
+1
++
+uSTO B
+x<>y
+uSTO B
+RCL .5
+RCL* .2
+CHS
+1
++
+uSTO B
+RCL .6
+RCL* .4
+CHS
+RCL+ .7
+RCL+ .8
+RCL* .2
+uSTO B
+RCL .7
+RCL* .4
+CHS
+RCL+ .6
+RCL* .2
+2
+*
+uSTO B
+RCL .6
+RCL* .4
+CHS
+RCL+ .7
+RCL- .8
+RCL* .2
+uSTO B
+RCL .6
+RCL* .4
+RCL+ .7
+RCL+ .8
+RCL* .2
+uSTO B
+RCL .7
+RCL* .4
+RCL+ .6
+RCL* .2
+2
+CHS
+*
+uSTO B
+RCL .6
+RCL* .4
+RCL+ .7
+RCL- .8
+RCL* .2
+uSTO B
+RCL 6
+3
+STO 0
+2
+STO 1
+RCL 6
+STO A
+RTN
+LBL D
+/
+STO 9
+R_down
+STO 8
+x<>y
+STO 7
+SF 8
+MATRIX 1
+3
+ENTER
+2
+DIM C
+1
+uSTO C
+0
+uSTO C
+2
+PI
+*
+RCL* 9
+Re<>Im
+e^x
+1/X
+uSTO C
+Re<>Im
+uSTO C
+Re<>Im
+X^2
+uSTO C
+Re<>Im
+uSTO C
+4
+ENTER
+2
+DIM D
+9
+ENTER
+2
+DIM E
+RCL MATRIX A
+RCL MATRIX C
+RESULT D
+*
+RCL MATRIX B
+RCL MATRIX C
+RESULT E
+*
+MATRIX 1
+RCL 8
+STO 0
+RCL E
+2
+STO 1
+R_down
+RCL E
+I
+MATRIX 1
+RCL 7
+STO 0
+R_down
+RCL D
+2
+STO 1
+R_down
+RCL D
+I
+/
+RTN

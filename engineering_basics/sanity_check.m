@@ -22,8 +22,8 @@
 % Author: pepin <pepin@PEPIN-HP-LAPTOP>
 % Created: 2024-08-07
 
-function [C,Q] = sanity_check(Fs,f0,BW,A)
-
+function [C] = sanity_check(Fs,f0,BW,A)
+  clc
   w0 = 2*pi*f0/Fs;
   Q = 1/(2*sinh((log(2)/2)*BW*w0/sin(w0)));
   alpha = sin(w0)/(2*Q);
@@ -49,12 +49,30 @@ function [C,Q] = sanity_check(Fs,f0,BW,A)
               2*((A-1)-(A+1)*cos(w0)) ...
                  (A+1)-(A-1)*cos(w0)-2*sqrt(A)*alpha];
 
-   C = [LPF; HPF; BPFq; BPF0; NOTCH; APF; PEAK; LOWSHELF; HIGHSHELF; [Fs f0 BW A Q alpha]];
+   C = [LPF; HPF; BPFq; BPF0; NOTCH; APF; PEAK; LOWSHELF; HIGHSHELF];
 
+   fprintf('Biquads for LPF HPF BPFq BPF0 NOTCH APF PEAK LOWSHELF HIGHSHELF (per row)\n');
    for ii = 1:size(C,1)
        for jj = 1:size(C,2)
            fprintf('%.6f, ',C(ii,jj));
        end
        fprintf('\n');
    end
+  fprintf('\n');
+  z = exp(j*w0);
+  fprintf("z^0 = (%.8f,%.8f)\n",real(z^0),imag(z^0));
+  fprintf("z^-1 = (%.8f,%.8f)\n",real(z^-1),imag(z^-1));
+  fprintf("z^-2 = (%.8f,%.8f)\n\n",real(z^-2),imag(z^-2));
+
+  for kk=1:size(C,1)
+    ED(kk,:) = [ C(kk,1)*z^0 + C(kk,2)*z^-1 + C(kk,3)*z^-2 C(kk,4)*z^0 + C(kk,5)*z^-1 + C(kk,6)*z^-2];
+    fprintf("E(%d) [%.6f,  %.6f]\t\tD(%d) [%.6f,  %.6f]\n",kk,real(ED(kk,1)),imag(ED(kk,1)),kk,real(ED(kk,2)),imag(ED(kk,2)));
+  endfor
+  fprintf('\n');
+  for kk=1:size(C,1)-1
+    H(kk) = (C(kk,1)*z^0 + C(kk,2)*z^-1 + C(kk,3)*z^-2) / (C(kk,4)*z^0 + C(kk,5)*z^-1 + C(kk,6)*z^-2);
+    fprintf("H(%d) = %.8f + %.8fj\n",kk,real(H(kk)),imag(H(kk)));
+  endfor
+
+
 end
