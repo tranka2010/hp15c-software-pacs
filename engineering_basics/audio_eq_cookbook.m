@@ -58,7 +58,7 @@ function [C,Hx,Hsweep] = sanity_check(Fs,f0,BW,A,fx)
                  (A+1)-(A-1)*cos(w0)-2*sqrt(A)*alpha];
 
   % Matrix of biquads
-  C = [LPF; HPF; BPFq; BPF0; NOTCH; APF; PEAK; LOWSHELF; HIGHSHELF];
+  C = [LPF; HPF; BPFq; BPF0; NOTCH; APF; PEAK; LOWSHELF; HIGHSHELF]
 
   % Print biquads to screen to aid in sanity check / validation of code
 

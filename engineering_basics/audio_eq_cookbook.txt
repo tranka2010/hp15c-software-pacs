@@ -4,32 +4,45 @@ LBL A
 /
 10^X
 STO .2
+1/X
+LSTx
++
+x<>y
+1/X
+1
+-
+*
+2
++
+SQRT
+1/X
+STO .1
 RTN
 LBL B
 RAD
+STO .9
+RCL .0
+RCL/ 9
 2
 *
-1/X
-HYP^-1 SIN
-2
-LN
-/
-2
-*
-R_down
-STO 9
-/
 PI
 *
-2
-*
-STO .0
 SIN
 LSTx
 /
-R_up
+/
+2
+LN
+LSTx
+/
 *
+HYP SIN
+2
+*
+1/X
 STO .1
+1
+STO .2
 RTN
 LBL C
 1
@@ -40,30 +53,20 @@ CF 8
 MATRIX 0
 MATRIX 1
 RCL .0
+RCL/ 9
+2
+*
+PI
+*
 SIN
 STO .3
-RCL .0
+LSTx
 COS
 STO .4
-x<>y
-RCL .0
-x<>y
-/
 RCL .1
-*
-2
-LN
-2
-/
-*
-HYP SIN
 2
 *
-1/X
-STO .9
-2
-*
-RCL .3
+R_up
 x<>y
 /
 STO .5
@@ -124,7 +127,6 @@ RCL+ .6
 2
 *
 CHS
-STO 6
 uSTO A
 RCL .4
 RCL* .6
@@ -174,11 +176,11 @@ CHS
 uSTO B
 x<>y
 uSTO B
-RCL .9
+RCL .1
 RCL* .5
 uSTO B
 0
-uSTO A
+uSTO B
 x<>y
 CHS
 uSTO B
@@ -261,21 +263,20 @@ RCL+ .7
 RCL- .8
 RCL* .2
 uSTO B
-RCL 6
-3
-STO 0
-2
-STO 1
-RCL 6
-STO A
 RTN
 LBL D
+RCL 9
 /
-STO 9
+STO 6
 R_down
 STO 8
-x<>y
+1
 STO 7
+RCL 8
+6
+-
+TEST 1
+STO+ 7
 SF 8
 MATRIX 1
 3
@@ -289,7 +290,7 @@ uSTO C
 2
 PI
 *
-RCL* 9
+RCL* 6
 Re<>Im
 e^x
 1/X
@@ -337,4 +338,17 @@ R_down
 RCL D
 I
 /
+RTN
+LBL 0
+ABS
+LOG
+2
+0
+*
+RTN
+LBL 1
+2
+0
+/
+10^X
 RTN
