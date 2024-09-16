@@ -82,7 +82,13 @@ int main(int argc, char **argv)
 
         // Number of bytes
         numBytes = idx;
-        printf("Num bytes: %d of 672 (%.2f%%)\n",numBytes, 100.0*(float)numBytes/(float)MAX_BYTES_HP15C_CE);
+        printf("Num bytes: %d of %d (%.2f%%) in default mode or %d of %d (%.2f%%) for 15.2 mode\n",
+                numBytes, 
+                MAX_BYTES_HP15C_CE,
+                100.0*(float)numBytes/(float)MAX_BYTES_HP15C_CE,
+                numBytes, 
+                MAX_BYTES_HP15C_CE_EXPANDED,
+                100.0*(float)numBytes/(float)MAX_BYTES_HP15C_CE_EXPANDED);
 
         // Copy program binary data into user image starting from
         // the 3rd 8-byte register from the bottom and work the way up
