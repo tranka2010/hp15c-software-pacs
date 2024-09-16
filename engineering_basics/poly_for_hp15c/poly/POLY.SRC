@@ -1,0 +1,206 @@
+%%HP: T(3)A(R)F(.);
+@ POLY by Wayne Scott
+DIR
+  PDIV
+  \<< DUP SIZE 3 ROLLD OBJ\-> \->ARRY SWAP OBJ\-> \->ARRY \-> c b a
+     \<< a b 
+         IF c 1 SAME
+         THEN OBJ\-> DROP / OBJ\-> 1 GET \->LIST { 0 }
+         ELSE           
+           WHILE OVER SIZE 1 GET c \>=
+           REPEAT DIVV
+           END DROP \-> d
+           \<< a SIZE 1 GET c 1 - -
+             IF DUP NOT
+             THEN 1
+             END \->LIST d OBJ\-> OBJ\-> DROP \->LIST
+           \>>
+        END
+     \>>
+  \>>
+  TRIM
+  \<< OBJ\-> \-> n
+     \<< n
+         WHILE ROLL DUP ABS NOT n 1 - AND
+         REPEAT DROP 'n' DECR
+         END n ROLLD
+         n \->LIST
+     \>>
+  \>>
+      RDER
+        \<< \-> F G
+          \<< G F PDER PMUL G PDER { -1 } PMUL F PMUL PADD G G PMUL
+          \>>
+        \>>
+      IRT
+        \<< OBJ\-> \-> n
+          \<<
+            IF n 0 >
+            THEN 1 n
+              START n ROLL { 1 } SWAP NEG +
+              NEXT
+            ELSE { 1 }
+            END
+            IF n 1 >
+            THEN 2 n
+              START PMUL
+              NEXT
+            END
+          \>>
+        \>>
+      PDER
+        \<< OBJ\-> \-> n
+          \<< 1 n
+            FOR i n ROLL n i - *
+            NEXT DROP
+            IF n 1 ==
+            THEN { 0 }
+            ELSE n 1 - \->LIST
+            END
+          \>>
+        \>>
+      PF
+        \<< MAXR { } \-> Z P OLD LAST
+          \<< 1 P SIZE
+            FOR I P I GET \-> p1
+              \<<
+                IF p1 OLD \=/
+                THEN Z p1 EVPLY 1 P SIZE
+                  FOR J
+                    IF P J GET P I GET \=/
+                    THEN p1 P J GET - /
+                    END
+                  NEXT p1 'OLD' STO { } 'LAST' STO
+                ELSE
+                  IF { } LAST SAME
+                  THEN 1 { } 1 P SIZE
+                    FOR K P K GET
+                      IF DUP p1 ==
+                      THEN DROP
+                      ELSE +
+                      END
+                    NEXT IRT Z SWAP
+                  ELSE LAST OBJ\-> DROP
+                  END RDER DUP2 5 PICK 1 + 3 ROLLD 3 \->LIST 'LAST' STO
+                  p1 EVPLY SWAP p1 EVPLY SWAP / SWAP ! /
+                END
+              \>>
+            NEXT P SIZE \->LIST
+          \>>
+        \>>
+      FCTP
+        \<<
+          IF DUP SIZE 3 >
+          THEN DUP BAIRS SWAP OVER PDIV DROP FCTP
+          END
+        \>>
+      RT
+        \<< TRIM DUP SIZE \-> n
+          \<<
+            IF n 3 >
+            THEN DUP BAIRS SWAP OVER PDIV DROP \-> A B
+              \<< A RT B RT
+              \>>
+            ELSE
+              IF n 2 >
+              THEN QUD
+              ELSE LIST\-> DROP NEG SWAP /
+              END
+            END 
+          \>>
+        \>>
+      L\178A
+        \<<
+          IF DUP TYPE 5 ==
+          THEN OBJ\-> \->ARRY
+          ELSE OBJ\-> 1 GET \->LIST
+          END
+        \>>
+      PADD
+        \<< DUP2 SIZE SWAP SIZE \-> A B nB nA
+          \<< A L\178A B L\178A
+            IF nA nB <
+            THEN SWAP
+            END
+            IF nA nB \=/
+            THEN 1 nA nB - ABS
+              START 0
+              NEXT
+            END nA nB - ABS 1 + ROLL OBJ\-> 1 GET
+            nA nB - ABS + \->ARRY + L\178A
+          \>>
+        \>>
+      PMUL
+        \<< DUP2 SIZE SWAP SIZE \-> X Y ny nx
+          \<< 1 nx ny + 1 -
+            FOR I 0
+            NEXT 1 nx
+            FOR I 1 ny
+              FOR J I J + 1 - ROLL X I GET Y J GET * + I J + 1 - ROLLD
+              NEXT
+            NEXT { } 1 nx ny + 1 -
+            START SWAP +
+            NEXT
+          \>>
+        \>>
+      EVPLY
+        \<< OVER
+          IF DUP TYPE 5 ==
+          THEN SIZE
+          ELSE SIZE 1 GET
+          END \-> a r n
+          \<< a 1 GET
+            IF n 1 >
+            THEN 2 n
+              FOR i r * a i GET +
+              NEXT
+            END
+          \>>
+        \>>
+      COEF
+        \<< \-> E n
+          \<< 0 n
+            FOR I 0 'X' STO E EVAL 'X' PURGE E 'X' \.d 'E' STO I ! /
+            NEXT 2 n 1 +
+            FOR I I ROLL
+            NEXT n 1 + \->LIST
+          \>>
+        \>>
+      EQ 1
+  DIVV
+    \<< DUP 1 GET \-> a b c
+      \<< a 1 GET c / DUP b * a SIZE RDM a SWAP - OBJ\-> 1 GETI
+        1 - PUT \->ARRY SWAP DROP b
+      \>>
+    \>>
+  QUD
+    \<< LIST\-> \->ARRY DUP 1 GET /
+      ARRY\-> DROP ROT DROP SWAP 2 / NEG DUP SQ ROT - \v/ DUP2 + 3 ROLLD -
+    \>>
+  BAIRS
+    \<< OBJ\-> 1 1 \-> n R S
+      \<<
+        DO 0 n 1 + PICK 0 0 0 4 PICK 5 n + 7
+          FOR J
+            J PICK R 7 PICK * +
+            S 8 PICK * +
+            7 ROLL DROP DUP 6 ROLLD
+            R 3 PICK * +
+            S 4 PICK * +
+            5 ROLL DROP -1
+          STEP 3 PICK SQ 3 PICK 6 PICK * -
+          IF DUP 0 ==
+          THEN DROP 1 1
+          ELSE 6 PICK 6 PICK *
+            5 PICK 9 PICK * -
+            OVER /
+            4 PICK 9 PICK *
+            8 PICK 7 PICK * -
+            ROT /
+          END DUP 'S' STO+
+          SWAP DUP 'R' STO+
+        UNTIL (0,1) * + ABS .000000001 < 7 ROLLD 6 DROPN
+        END n DROPN 1 R NEG S NEG 3 \->LIST
+      \>>
+    \>>
+END
