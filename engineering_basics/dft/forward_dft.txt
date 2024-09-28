@@ -1,0 +1,74 @@
+LBL A
+SF 8
+RAD
+STO .0
+0
+STO .4
+STO .5
+MATRIX 1
+RCL DIM A
+STO .1
+2
+PI
+*
+RCL* .0
+RCL/ .1
+CHS
+Re<>Im
+e^x
+STO .1
+Re<>Im
+STO .2
+LBL 0
+RCL .1
+RCL .2
+I
+RCL 1
+1
+-
+y^x
+RCL A
+*
+STO+ .4
+Re<>Im
+STO+ .5
+1
+STO+ 1
+RCL DIM A
+RCL 1
+x<=y
+GTO 0
+RCL .4
+RCL .5
+I
+MATRIX 1
+RTN
+LBL B
+RCL DIM A
+2
+x<>y
+DIM B
+0
+STO .3
+LBL 1
+RCL .3
+GSB A
+1
+RCL .3
++
+STO .3
+STO 1
+x<>y
+STO B
+Re<>Im
+2
+STO 0
+x<>y
+STO B
+RCL DIM A
+RCL .3
+x<y
+GTO 1
+RCL MATRIX B
+MATRIX 4
+RTN
