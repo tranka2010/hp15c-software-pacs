@@ -13,9 +13,9 @@ C = eye(cols);
 D = zeros(1,cols);
 E = zeros(rows,cols);
 
-isRootUnique = true;
-reduceOrder = 1;
-for m = 1 : cols
+isRootUnique = true; % R.1
+reduceOrderBy = 1; %R.2
+for m = 1 : cols % R.9
     B = B*0;
     if m > 1
       if A(r,m) == A(r,m-1)
@@ -25,16 +25,16 @@ for m = 1 : cols
       end
     end
     if isRootUnique == false
-        reduceOrder=reduceOrder+1;
-        B(reduceOrder) = 1;
-        lastRepeatedRoot = m;
+        reduceOrderBy=reduceOrderBy+1;
+        B(reduceOrderBy) = 1;
+        lastRepeatedRoot = m; %R.4
     else
         B(1) = 1;
-        reduceOrder = 1;
-        firstRepeatedRoot = m;
+        reduceOrderBy = 1;
+        firstRepeatedRoot = m; % R.3
         lastRepeatedRoot = firstRepeatedRoot;
     end
-    for n = 1 : cols
+    for n = 1 : cols % R.8
         xp = A(r,n);
         if (n == m || (n >= firstRepeatedRoot && n <= lastRepeatedRoot))
             xp = 0;
