@@ -17,7 +17,7 @@ D = zeros(1,cols);
 E = zeros(rows,cols);
 
 isRootUnique = true; % R.1
-reduceOrderBy = 1; %R.2
+reduceOrderBy = 1; % R.2
 for m = 1 : cols % R.9
     B = B*0;
     if m > 1
@@ -28,14 +28,14 @@ for m = 1 : cols % R.9
       end
     end
     if isRootUnique == false
-        reduceOrderBy=reduceOrderBy+1;
+        reduceOrderBy=reduceOrderBy+1; % R.2
         B(reduceOrderBy) = 1;
-        lastRepeatedRoot = m; %R.4
+        lastRepeatedRoot = m; % R.4
     else
         B(1) = 1;
-        reduceOrderBy = 1;
+        reduceOrderBy = 1; % R.2
         firstRepeatedRoot = m; % R.3
-        lastRepeatedRoot = firstRepeatedRoot;
+        lastRepeatedRoot = m; % R.4
     end
     for n = 1 : cols % R.8
         xp = A(r,n);
