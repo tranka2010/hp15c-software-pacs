@@ -1,12 +1,6 @@
 N = 32;
 n = [0:N-1]-N/2;
 alpha = 2;
-##x = 0.5 *(1- cos(2*pi*n/N))
 x = cos(pi*n/N).^2
 
-x_coherent = sum(x)/N
-x_enbw = N*sum(abs(x).^2)/(sum(x).^2)
-x_pl = 10*log10(1/x_enbw)
-x_scallop = 20*log10(abs(sum(x.*exp(-j*pi*n/N)))/sum(x))
-x_worst = x_pl + x_scallop
-plot(x)
+fig_merit_sim(x,N);
