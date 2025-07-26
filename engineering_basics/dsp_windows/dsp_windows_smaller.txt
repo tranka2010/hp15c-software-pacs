@@ -1,0 +1,134 @@
+LBL A
+SF 8
+RAD
+GSB .0
+MATRIX 0
+1
+ENTER
+7
+DIM E
+MATRIX 1
+RCL .3
+RCL/ 3
+uSTO E
+RCL .4
+RCL/ .3
+RCL/ .3
+RCL* 3
+uSTO E
+1/x
+uSTO E
+RCL .5
+RCL .6
+I
+ABS
+RCL .3
+/
+uSTO E
+x^2
+*
+uSTO E
+RCL .8
+RCL .9
+I
+>P
+RCL/ 3
+uSTO E
+Re<>Im
+STO E
+MATRIX 1
+RTN
+LBL .0
+0
+STO .1
+STO .3
+STO .4
+STO .5
+STO .6
+STO .7
+STO .8
+STO .9
+RCL 2
+STO I
+LBL .1
+GSB I
+STO+ .3
+STO .7
+ENTER
+*
+STO+ .4
+0
+RCL .1
+pi
+*
+RCL/ 3
+CHS
+I
+e^x
+RCL .7
+*
+STO+ .5
+Re<>Im
+STO+ .6
+Re<>Im
+RCL .7
+/
+2
+RCL* 5
+y^x
+RCL .7
+*
+STO+ .8
+Re<>Im
+STO+ .9
+1
+RCL+ .1
+STO .1
+RCL 3
+x!=y
+GTO .1
+RTN
+LBL 0
+1
+RTN
+LBL 1
+1
+RCL .1
+RCL 3
+2
+/
+-
+RCL/ 3
+2
+*
+ABS
+-
+RTN
+LBL 2
+RCL .1
+RCL 3
+2
+/
+-
+RCL/ 3
+pi
+*
+COS
+RCL 4
+y^x
+RTN
+LBL 3
+RCL 4
+1
+-
+RCL .1
+RCL 3
+/
+pi
+*
+2
+*
+cos
+*
+RCL+ 4
+RTN

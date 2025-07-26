@@ -7,6 +7,7 @@ function fig_merit_sim(x,N)
   x_worst = x_pl + x_scallop
   X = 20*log10(abs(fft(x)/N)).'
 
+fft(x)/N
   figure(1)
   subplot(2,1,1)
   plot(x)
