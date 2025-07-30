@@ -1,0 +1,3 @@
+https://www.recordingblogs.com/wiki/worst-case-processing-loss
+https://www.recordingblogs.com/wiki/hamming-window
+https://www.recordingblogs.com/wiki/overlap-correlation
